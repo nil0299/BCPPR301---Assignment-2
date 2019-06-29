@@ -1,0 +1,63 @@
+@startuml
+class Interpreter {
+ my_file: string
+ my_shelf: None
+ my_class_content: list
+ my_relationship_content: string
+ all_my_errors: list
+ add_file(file_name, new_module_name): Module
+ read_file(): string
+ find_relationship(): string
+ add_class(class_name, attributes, methods, relationships): Class
+ find_classes(): tuple
+ add_module(new_module_name, classes): Module
+ write_modules(): file
+ shelve_modules(): file
+}
+
+class Module {
+  module_name: string
+  create_module(new_module_name, new_classes): Module
+  write_files(): tuple
+}
+
+class ClassBuilder {
+  name: string
+  attributes: string
+  methods: string
+  relationships: string
+  add_class_attributes() : Attribute
+  add_class_methods(): Method
+  add_relationships(): Relationship
+  build_class(new_name, new_attributes, new_methods, new_relationship) : ClassBuilder
+  print_class(): string
+}
+
+class Attribute {
+  name: string
+  type: string
+  __str__(): string
+  find_type(): string
+}
+
+class Method {
+  name: string
+  input: string
+  return_type: string
+  __str__(): string
+  get_return(): string
+}
+
+class Relationship {
+  name: string
+  type: string
+  __str__(): string
+}
+
+Module "1" *-- "0...*" ClassBuilder
+ClassBuilder "1" *-- "0...*"  Attribute
+ClassBuilder "1" *-- "0...*"  Method
+ClassBuilder "1" *-- "0...*"  Relationship
+Interpreter "1" *-- "0...*" Module
+Interpreter "1" *-- "0...*"  ClassBuilder
+@enduml

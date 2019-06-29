@@ -1,0 +1,48 @@
+"""
+>>> from interpreter.controller import Main
+>>> root = 'c:/test'
+>>> source = 'class_diagram_plantUML'
+>>> write_folder = 'test_result'
+>>> controller = Main()
+>>> print(controller.root_directory)
+None
+>>> controller.do_root(root)
+Root directory to read & write files is:  c:/test
+>>> print(controller.source_file)
+None
+>>> controller.do_source("wrong")
+Error - File not found
+looking for file at c:/test/wrong
+>>> controller.do_source("blank.txt")
+Error - File must contain plant UML
+>>> controller.do_source(source)
+Source file to interpret is: c:/test/c:/test/class_diagram_plantUML
+>>> controller.do_write_folder(write_folder)
+Folder to write files is: c:/test/test_result
+>>> controller.do_interpret('')
+Interpreting complete
+>>> controller.do_check_file('')
+Source file to interpret is: c:/test/
+>>> controller.do_source('wrong')
+Error - File not found
+looking for file at c:/test/wrong
+>>> controller = Main()
+>>> controller.do_i_shelve('')
+Please enter the directory to write files to : write_folder xxxx
+>>> controller.do_root(root)
+Root directory to read & write files is:  c:/test
+>>> controller.do_i_shelve('')
+Please enter the directory to write files to : write_folder xxxx
+>>> controller.do_source(source)
+Source file to interpret is: c:/test/c:/test/class_diagram_plantUML
+>>> controller.do_i_shelve('test_folder')
+Please enter the directory to write files to : write_folder xxxx
+>>> controller.do_write_folder(write_folder)
+Folder to write files is: c:/test/test_result
+>>> controller.do_i_shelve('test_folder')
+modules shelved to test_folder
+>>> controller.do_quit('')
+Closing Down
+True
+
+"""

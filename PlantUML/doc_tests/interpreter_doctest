@@ -1,0 +1,21 @@
+"""
+>>> from interpreter.module_builder.interpreter import Interpreter
+>>> a = Interpreter()
+>>> a.add_file('c:/test/class_diagram_plantUML', 'test_result')
+>>> print(a.my_file)
+c:/test/class_diagram_plantUML
+>>> print(len(a.all_my_modules))
+1
+>>> print(len(a.all_my_classbuilders))
+6
+>>> print(a.all_my_classbuilders[1].name)
+Module
+>>> print(len(a.all_my_errors))
+0
+>>> print(a.all_my_modules[0].module_name)
+test_result
+>>> a_class = a.all_my_classbuilders[1]
+>>> print(len(a_class.all_my_attributes))
+1
+
+"""
