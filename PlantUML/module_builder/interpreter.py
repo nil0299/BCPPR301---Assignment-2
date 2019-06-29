@@ -1,38 +1,30 @@
 import re
-from module_builder.class_builder import ClassBuilder
-from module_builder.module import Module
-from module_builder.shelver import Shelver
-from module_builder.db_writer import DbWriter
-from module_builder.class_finder import ClassFinder
+from .class_builder import ClassBuilder
+from .module import Module
+from .shelver import Shelver
+from .db_writer import DbWriter
 
 
-class FileReader:
+class Interpreter:
+
+    """interpret the plant UML file and create a list of classes"""
+
+    language = "Plant UML"
 
     def __init__(self):
         self.my_file = ""
+        self.my_shelf = None
         self.my_class_content = []
         self.my_relationship_content = ""
         self.all_my_classbuilders = []
         self.all_my_modules = []
         self.all_my_errors = []
-
-    def add_class(self, args):
-        new_class = ClassBuilder()
-        new_class.build_class(args)
-        self.all_my_classbuilders.append(new_class)
-
-    def add_module(self, new_module_name, new_classes):
-        new_module = Module()
-        new_module.create_module(new_module_name, new_classes)
-        self.all_my_modules.append(new_module)
+        self.my_db = None
 
     def add_file(self, file_name, new_module_name):
         self.my_file = file_name
         self.read_file()
-        my_classes = ClassFinder.find_classes(self.my_class_content,
-                                              self.my_relationship_content)
-        for a_class in my_classes:
-            self.add_class(a_class)
+        self.find_classes()
         self.add_module(new_module_name, self.all_my_classbuilders)
 
     def read_file(self):
@@ -49,11 +41,51 @@ class FileReader:
             self.all_my_errors.append(e)
             print("Error - File not found")
 
+    @staticmethod
+    def find_relationship(relationship, class_name):
+        if relationship.startswith(class_name):
+            if len(relationship.split(" ")) < 2:
+                pass
+            if re.search(r"\*--", relationship):
+                com_class = relationship.split(" ")[4]
+                return tuple(("comp", com_class))
+            if re.search(r"--", relationship):
+                as_class = relationship.split(" ")[4]
+                return tuple(("assos", as_class))
+        elif relationship.endswith(class_name):
+            if len(relationship.split(" ")) < 2:
+                pass
+            if re.search(r"<\|--", relationship):
+                ext_class = relationship.split(" ")[0]
+                return tuple(("extends", ext_class))
 
-class ModuleWriter(FileReader):
+    def add_class(self, class_name, attributes, methods, relationships):
+        new_class = ClassBuilder()
+        new_class.build_class(class_name, attributes, methods, relationships)
+        self.all_my_classbuilders.append(new_class)
 
-    def __init__(self):
-        FileReader.__init__(self)
+    def find_classes(self):
+        for class_info in self.my_class_content:
+            class_name = class_info.split(' ')[1]
+            attributes = []
+            methods = []
+            relationships = []
+            for line in class_info.split("\n"):
+                if line.find(":") != -1 and line.find("(") == -1:
+                    attributes.append(line)
+            for line in class_info.split("\n"):
+                if line.find("(") != -1:
+                    methods.append(line)
+            for relationship in self.my_relationship_content.split("\n"):
+                if self.find_relationship(relationship, class_name):
+                    relationships.append(
+                        self.find_relationship(relationship, class_name))
+            self.add_class(class_name, attributes, methods, relationships)
+
+    def add_module(self, new_module_name, new_classes):
+        new_module = Module()
+        new_module.create_module(new_module_name, new_classes)
+        self.all_my_modules.append(new_module)
 
     def write_modules(self):
         for a_module in self.all_my_modules:
@@ -68,39 +100,11 @@ class ModuleWriter(FileReader):
                     self.all_my_errors.append(e)
                     print("Error - Directory does not exist")
 
-
-class UmlInterpreter(ModuleWriter):
-
-    language = "Plant UML"
-
-    def __init__(self):
-        ModuleWriter.__init__(self)
-
-    def interpret(self, source_file, write_folder):
-        self.add_file(source_file, write_folder)
-        self.write_modules()
-
-
-class ModuleShelver (UmlInterpreter):
-    """shelves the module data to a file"""
-
-    def __init__(self):
-        UmlInterpreter.__init__(self)
-        self.my_shelf = None
-
     def shelve_modules(self, shelf_file):
         shelf = Shelver(shelf_file)
         for a_module in self.all_my_modules:
             shelf.shelve_modules(a_module)
         self.my_shelf = shelf.my_shelf_file
-
-
-class DbCreator (UmlInterpreter):
-    """creates a database writer class"""
-
-    def __init__(self):
-        UmlInterpreter.__init__(self)
-        self.my_db = None
 
     def create_db(self):
         db = DbWriter()
