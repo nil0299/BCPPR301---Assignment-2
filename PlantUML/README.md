@@ -1,7 +1,7 @@
 # BCPR301 Assignment 2
 # Smell Detection
 ## Bad Smell 1
-Name: Large Class
+### Name: Large Class
 Location: PlantUML/module_builder/class_builder.py/ClassBuilder/ (between lines 6-77)
 Reasons why it is bad:
 1.	It is quite a large class (77 lines of code)
