@@ -1,22 +1,26 @@
 """
->>> from interpreter.module_builder.class_builder import ClassBuilder
->>> a = ClassBuilder()
->>> a.build_class("ClassName", ["attribute1: string"], ["Method1(input):integer"], [("comp", "Class2")])
->>> print(a.name)
+>>> from module_builder.class_builder import Director, PythonClassBuilder, PythonClass
+>>> builder = ["ClassName", ["attribute1: string"], ["Method1(input):integer"], [("comp", "Class2"), ("extends", "parent")]]
+>>> mb = PythonClassBuilder()
+>>> md = Director(mb)
+>>> p = PythonClass()
+>>> p.write_files()
+'class '
+>>> isinstance(p.write_files(), str)
+True
+>>> md.build_class(builder)
+>>> getFirst = mb.get_class()
+>>> print(getFirst.name)
 ClassName
->>> print(a.attributes)
-['attribute1: string']
->>> print(a.methods)
-['Method1(input):integer']
->>> print(len(a.all_my_attributes))
-1
->>> print(len(a.all_my_methods))
-1
->>> print(len(a.all_my_composite_classes))
-1
->>> print(a.all_my_composite_classes[0])
-class2s
->>> print(a.relationships)
-[('comp', 'Class2')]
+>>> isinstance(getFirst.children[0], object)
+True
+>>> isinstance(getFirst.children[1], object)
+True
+>>> print(len(getFirst.children))
+4
+>>> isinstance(getFirst.write_files(), str)
+True
+>>> isinstance(getFirst.__str__(), str)
+True
 
 """

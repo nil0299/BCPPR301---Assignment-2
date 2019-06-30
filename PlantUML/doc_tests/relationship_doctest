@@ -1,5 +1,5 @@
 """
->>> from interpreter.module_builder.relationship import Relationship
+>>> from module_builder.relationship import Relationship
 >>> a = Relationship(('extends', 'Class2'))
 >>> print(a.name)
 class2
@@ -10,5 +10,7 @@ extends
 class3
 >>> print(a.type)
 comp
+>>> a.return_type()
+'comp'
 
 """

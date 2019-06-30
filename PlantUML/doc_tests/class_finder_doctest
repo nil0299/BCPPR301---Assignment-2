@@ -1,0 +1,14 @@
+"""
+>>> from module_builder.class_finder import ClassFinder
+>>> from module_builder.interpreter import FileReader
+>>> cf = ClassFinder()
+>>> fr = FileReader()
+>>> fr.add_file('class_diagram_plantUML', "test")
+>>> isinstance(cf.find_classes(fr.my_class_content, fr.my_relationship_content), list)
+True
+>>> isinstance(cf.find_classes(fr.my_class_content, fr.my_relationship_content)[1], tuple)
+True
+
+>>>
+
+"""

@@ -1,11 +1,27 @@
 """
->>> from interpreter.controller import Main
+>>> from controller import Main
 >>> root = 'c:/test'
->>> source = 'class_diagram_plantUML'
+>>> source = 'class_diagram_plantUML.txt'
 >>> write_folder = 'test_result'
 >>> controller = Main()
+>>> controller.do_interpret("")
+expected str, bytes or os.PathLike object, not NoneType
+>>> controller.do_i_shelve("")
+Please enter the directory to write files to : write_folder xxxx
 >>> print(controller.root_directory)
 None
+>>> controller.do_source("c:/test/class_diagram_plantUML.txt")
+Source file to interpret is: c:/test/class_diagram_plantUML.txt
+>>> controller.do_print_uml("")
+==> OUTPUT FILE:
+printed_uml.png
+>>> controller.do_write_folder("c:/test")
+Folder to write files is: c:/test
+>>> controller.do_i_shelve("")
+modules shelved to .
+>>> controller.do_root("c:/test")
+Root directory to read & write files is:  c:/test
+>>> controller = Main()
 >>> controller.do_root(root)
 Root directory to read & write files is:  c:/test
 >>> print(controller.source_file)
@@ -15,8 +31,12 @@ Error - File not found
 looking for file at c:/test/wrong
 >>> controller.do_source("blank.txt")
 Error - File must contain plant UML
+>>> controller.do_source("blank_plant.txt")
+Source file to interpret is: c:/test/c:/test/blank_plant.txt
+>>> controller.do_interpret("")
+'NoneType' object has no attribute 'lower'
 >>> controller.do_source(source)
-Source file to interpret is: c:/test/c:/test/class_diagram_plantUML
+Source file to interpret is: c:/test/c:/test/class_diagram_plantUML.txt
 >>> controller.do_write_folder(write_folder)
 Folder to write files is: c:/test/test_result
 >>> controller.do_interpret('')
@@ -34,14 +54,36 @@ Root directory to read & write files is:  c:/test
 >>> controller.do_i_shelve('')
 Please enter the directory to write files to : write_folder xxxx
 >>> controller.do_source(source)
-Source file to interpret is: c:/test/c:/test/class_diagram_plantUML
+Source file to interpret is: c:/test/c:/test/class_diagram_plantUML.txt
 >>> controller.do_i_shelve('test_folder')
 Please enter the directory to write files to : write_folder xxxx
 >>> controller.do_write_folder(write_folder)
 Folder to write files is: c:/test/test_result
 >>> controller.do_i_shelve('test_folder')
-modules shelved to test_folder
->>> controller.do_quit('')
+modules shelved to test_folder.
+>>> controller.help_interpret()
+Translates your SOURCE plantUML file to a python file
+in the ROOT directory provided
+Update ROOT directory: root [file_location]
+Update SOURCE file: source [source_file]
+>>> controller.help_source()
+Update SOURCE file: source [source_file]
+This file will be interpreted
+>>> controller.help_root()
+Update ROOT directory: root [file_location]
+Files will be read and written to this location
+>>> controller.help_write_folder()
+The folder to which your files will be written
+PLEASE create this folder prior to interpreting your file
+>>> controller.help_check_file()
+Use this function to check if your file is suitable for translation
+>>> controller.help_print_uml()
+Print your source PlantUML file to a PNG
+>>> controller.help_i_shelve()
+Store the class data in a 'shelf' for later use
+>>> controller.help_quit()
+Quit the program
+>>> controller.do_quit()
 Closing Down
 True
 

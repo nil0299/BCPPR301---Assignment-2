@@ -1,5 +1,5 @@
 """
->>> from interpreter.module_builder.method import Method
+>>> from module_builder.method import Method
 >>> a = Method('method1', ':string', '(an_input)')
 >>> print(a.name)
 method1
@@ -11,6 +11,6 @@ str
 >>> print(a.input)
 <BLANKLINE>
 >>> print(a.return_type)
-pass
+<BLANKLINE>
 
 """

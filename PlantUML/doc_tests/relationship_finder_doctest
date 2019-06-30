@@ -1,0 +1,11 @@
+"""
+>>> from module_builder.relationship_finder import RelationshipFinder
+>>> rf = RelationshipFinder()
+>>> rf.find_relationship("ClassA \"0..*\" *-- \"1..*\" ClassB", "ClassA")
+('comp', 'ClassB')
+>>> rf.find_relationship("ClassA \"0..*\" -- \"0..*\" ClassB", "ClassA")
+('assos', 'ClassB')
+>>> rf.find_relationship("ClassB \"0..*\" <|-- \"0..*\" ClassA", "ClassA")
+('extends', 'ClassB')
+
+"""
